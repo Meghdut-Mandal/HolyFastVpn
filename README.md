@@ -1,4 +1,5 @@
-# Cake-VPN
+## Holy-Fast VPN
+
 Android VPN app based on OpenVPN library.
 
 </br>
