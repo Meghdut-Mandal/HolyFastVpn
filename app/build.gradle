@@ -8,7 +8,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        applicationId 'com.lazycoder.cakevpn'
+        applicationId 'com.holy.fast.vpn'
     }
     buildTypes {
         release {

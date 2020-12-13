@@ -1,11 +1,11 @@
-package com.lazycoder.cakevpn;
+package com.holy.fast.vpn;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.lazycoder.cakevpn.model.Server;
+import com.holy.fast.vpn.model.Server;
 
-import static com.lazycoder.cakevpn.Utils.getImgURL;
+import static com.holy.fast.vpn.Utils.getImgURL;
 
 public class SharedPreference {
 
@@ -46,14 +46,11 @@ public class SharedPreference {
      */
     public Server getServer() {
 
-        Server server = new Server(
-                mPreference.getString(SERVER_COUNTRY,"Japan"),
-                mPreference.getString(SERVER_FLAG,getImgURL(R.drawable.japan)),
-                mPreference.getString(SERVER_OVPN,"japan.ovpn"),
-                mPreference.getString(SERVER_OVPN_USER,"vpn"),
-                mPreference.getString(SERVER_OVPN_PASSWORD,"vpn")
-        );
-
-        return server;
+        return new Server(
+              "India",
+             getImgURL(R.drawable.uk_flag),
+              "holyfast.ovpn",
+              "Gautam",
+               "1234567890");
     }
 }

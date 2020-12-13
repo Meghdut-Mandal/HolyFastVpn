@@ -1,4 +1,4 @@
-package com.lazycoder.cakevpn.interfaces;
+package com.holy.fast.vpn.interfaces;
 
 public interface NavItemClickListener {
     void clickedItem(int index);

@@ -1,4 +1,4 @@
-package com.lazycoder.cakevpn.view;
+package com.holy.fast.vpn.view;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,12 +21,12 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.bumptech.glide.Glide;
-import com.lazycoder.cakevpn.CheckInternetConnection;
-import com.lazycoder.cakevpn.R;
-import com.lazycoder.cakevpn.SharedPreference;
-import com.lazycoder.cakevpn.databinding.FragmentMainBinding;
-import com.lazycoder.cakevpn.interfaces.ChangeServer;
-import com.lazycoder.cakevpn.model.Server;
+import com.holy.fast.vpn.CheckInternetConnection;
+import com.holy.fast.vpn.R;
+import com.holy.fast.vpn.SharedPreference;
+import com.holy.fast.vpn.databinding.FragmentMainBinding;
+import com.holy.fast.vpn.interfaces.ChangeServer;
+import com.holy.fast.vpn.model.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;

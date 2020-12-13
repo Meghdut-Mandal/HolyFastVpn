@@ -1,4 +1,4 @@
-package com.lazycoder.cakevpn;
+package com.holy.fast.vpn;
 
 import android.net.Uri;
 
