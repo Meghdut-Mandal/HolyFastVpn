@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "712053915091",
+    "firebase_url": "https://holyfastvpn-default-rtdb.firebaseio.com",
+    "project_id": "holyfastvpn",
+    "storage_bucket": "holyfastvpn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712053915091:android:e92316d1a4932715814326",
+        "android_client_info": {
+          "package_name": "com.holy.fast.vpn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712053915091-mv8vltj05n8o38ihvtul49l7195nhlt3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsvWjyyhrY9I3zHfhXVN1MsP_3RxgR_M8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712053915091-mv8vltj05n8o38ihvtul49l7195nhlt3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
