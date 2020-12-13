@@ -1,4 +1,4 @@
-package com.holy.fast.vpn.view;
+package com.holy.fast.vpn.ui;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;

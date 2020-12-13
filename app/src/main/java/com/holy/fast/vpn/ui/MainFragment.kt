@@ -1,4 +1,4 @@
-package com.holy.fast.vpn.view
+package com.holy.fast.vpn.ui
 
 import android.app.Activity
 import android.content.*
@@ -25,9 +25,7 @@ import de.blinkt.openvpn.OpenVpnApi
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.OpenVPNThread
 import de.blinkt.openvpn.core.VpnStatus
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStreamReader
 
 class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     private var server: Server? = null
@@ -43,7 +41,6 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     lateinit var byteInTv: TextView
     lateinit var lastPacketReceiveTv: TextView
     lateinit var selectedServerIcon: ImageView
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -194,23 +191,9 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
         try {
             // .ovpn file
             val conf = activity!!.assets.open(server!!.ovpn)
-            val isr = InputStreamReader(conf)
-            val br = BufferedReader(isr)
-            var config = ""
-            var line: String?
-            while (true) {
-                line = br.readLine()
-                if (line == null) break
-                config += """
-                    $line
-                    
-                    """.trimIndent()
-            }
-            br.readLine()
-            OpenVpnApi.startVpn(context, config, server!!.country, server!!.ovpnUserName, server!!.ovpnUserPassword)
-
-            // Update log
-            logTv.setText("Connecting...")
+            val line = conf.bufferedReader().lineSequence().joinToString(separator = "\n")
+            OpenVpnApi.startVpn(context, line, server!!.country, server!!.ovpnUserName, server!!.ovpnUserPassword)
+            logTv.text = "Connecting..."
             vpnStart = true
         }
         catch (e: IOException) {

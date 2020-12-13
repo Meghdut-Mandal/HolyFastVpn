@@ -336,9 +336,10 @@ int color abc_background_cache_hint_selector_material_light 0x0
 int color abc_btn_colored_borderless_text_material 0x0
 int color abc_btn_colored_text_material 0x0
 int color abc_color_highlight_material 0x0
+int color abc_decor_view_status_guard 0x0
+int color abc_decor_view_status_guard_light 0x0
 int color abc_hint_foreground_material_dark 0x0
 int color abc_hint_foreground_material_light 0x0
-int color abc_input_method_navigation_guard 0x0
 int color abc_primary_text_disable_only_material_dark 0x0
 int color abc_primary_text_disable_only_material_light 0x0
 int color abc_primary_text_material_dark 0x0
@@ -808,7 +809,6 @@ int id tag_accessibility_clickable_spans 0x0
 int id tag_accessibility_heading 0x0
 int id tag_accessibility_pane_title 0x0
 int id tag_screen_reader_focusable 0x0
-int id tag_state_description 0x0
 int id tag_transition_group 0x0
 int id tag_unhandled_key_event_manager 0x0
 int id tag_unhandled_key_listeners 0x0
@@ -1697,6 +1697,7 @@ int style Theme_AppCompat_Dialog 0x0
 int style Theme_AppCompat_DialogWhenLarge 0x0
 int style Theme_AppCompat_Dialog_Alert 0x0
 int style Theme_AppCompat_Dialog_MinWidth 0x0
+int style Theme_AppCompat_Empty 0x0
 int style Theme_AppCompat_Light 0x0
 int style Theme_AppCompat_Light_DarkActionBar 0x0
 int style Theme_AppCompat_Light_Dialog 0x0
