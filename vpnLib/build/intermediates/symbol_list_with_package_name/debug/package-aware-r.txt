@@ -359,6 +359,8 @@ color abc_tint_switch_track
 color accent
 color accent_material_dark
 color accent_material_light
+color androidx_core_ripple_material_light
+color androidx_core_secondary_text_default_material_light
 color background_floating_material_dark
 color background_floating_material_light
 color background_material_dark
@@ -807,6 +809,7 @@ id tag_accessibility_clickable_spans
 id tag_accessibility_heading
 id tag_accessibility_pane_title
 id tag_screen_reader_focusable
+id tag_state_description
 id tag_transition_group
 id tag_unhandled_key_event_manager
 id tag_unhandled_key_listeners
