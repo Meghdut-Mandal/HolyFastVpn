@@ -50,8 +50,8 @@ public class SharedPreference {
         return new AssetServer(
               "India",
              getImgURL(R.drawable.uk_flag),
-              "holyfast.ovpn",
-              "Gautam",
+              "demo_star.ovpn",
+              "meghdut",
                "1234567890");
     }
 }
