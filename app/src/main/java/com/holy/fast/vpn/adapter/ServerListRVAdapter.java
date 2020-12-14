@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.holy.fast.vpn.R;
 import com.holy.fast.vpn.interfaces.NavItemClickListener;
 import com.holy.fast.vpn.model.Server;
@@ -41,9 +40,7 @@ public class ServerListRVAdapter extends RecyclerView.Adapter<ServerListRVAdapte
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         holder.serverCountry.setText(serverLists.get(position).getCountry());
-        Glide.with(mContext)
-                .load(serverLists.get(position).getFlagUrl())
-                .into(holder.serverIcon);
+
 
         holder.serverItemLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,8 @@
 package com.holy.fast.vpn.model;
 
-public class Server {
+import android.content.Context;
+
+public abstract class Server {
     private String country;
     private String flagUrl;
     private String ovpn;
@@ -64,4 +66,6 @@ public class Server {
     public void setOvpnUserPassword(String ovpnUserPassword) {
         this.ovpnUserPassword = ovpnUserPassword;
     }
+
+    public abstract  String  getConnectionString(Context context);
 }

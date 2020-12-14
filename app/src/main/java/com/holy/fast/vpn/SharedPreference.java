@@ -3,6 +3,7 @@ package com.holy.fast.vpn;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.holy.fast.vpn.model.AssetServer;
 import com.holy.fast.vpn.model.Server;
 
 import static com.holy.fast.vpn.Utils.getImgURL;
@@ -46,7 +47,7 @@ public class SharedPreference {
      */
     public Server getServer() {
 
-        return new Server(
+        return new AssetServer(
               "India",
              getImgURL(R.drawable.uk_flag),
               "holyfast.ovpn",

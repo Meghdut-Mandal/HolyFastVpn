@@ -47,16 +47,6 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     lateinit var byteInTv: TextView
     lateinit var lastPacketReceiveTv: TextView
 
-//    fun startAnimation(ctx: Context?, view: Int, animation: Int, show: Boolean) {
-//        val Element: View = findViewById<View>(view)
-//        if (show) {
-//            Element.visibility = View.VISIBLE
-//        } else {
-//            Element.visibility = View.INVISIBLE
-//        }
-//        val anim = AnimationUtils.loadAnimation(ctx, animation)
-//        Element.startAnimation(anim)
-//    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +77,7 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
         // Update current selected server icon
         updateCurrentServerIcon(server?.flagUrl)
         connection = CheckInternetConnection()
-        LocalBroadcastManager.getInstance(activity!!).registerReceiver(broadcastReceiver, IntentFilter("connectionState"))
+        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(broadcastReceiver, IntentFilter("connectionState"))
     }
 
 
@@ -98,7 +88,7 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
 
         // Checking is vpn already running or not
         isServiceRunning
-        VpnStatus.initLogCache(activity!!.cacheDir)
+        VpnStatus.initLogCache(requireActivity().cacheDir)
     }
 
     /**
@@ -119,10 +109,10 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
      * Show show disconnect confirm dialog
      */
     fun confirmDisconnect() {
-        val builder = AlertDialog.Builder(activity!!)
-        builder.setMessage(activity!!.getString(R.string.connection_close_confirm))
-        builder.setPositiveButton(activity!!.getString(R.string.yes)) { dialog, id -> stopVpn() }
-        builder.setNegativeButton(activity!!.getString(R.string.no)) { dialog, id ->
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.setMessage(requireActivity().getString(R.string.connection_close_confirm))
+        builder.setPositiveButton(requireActivity().getString(R.string.yes)) { dialog, id -> stopVpn() }
+        builder.setNegativeButton(requireActivity().getString(R.string.no)) { dialog, id ->
             // User cancelled the dialog
         }
 
@@ -209,9 +199,7 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     private fun startVpn() {
         try {
             // .ovpn file
-            val conf = activity!!.assets.open(server!!.ovpn)
-            val line = conf.bufferedReader().lineSequence().joinToString(separator = "\n")
-            OpenVpnApi.startVpn(context, line, server!!.country, server!!.ovpnUserName, server!!.ovpnUserPassword)
+            OpenVpnApi.startVpn(context, server!!.getConnectionString(context), server!!.country, server!!.ovpnUserName, server!!.ovpnUserPassword)
             logTv.text = "Connecting..."
             vpnStart = true
         }
@@ -257,11 +245,11 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
      */
     fun status(status: String) {
         if (status == "connect") {
-            vpnBtn.setText(context!!.getString(R.string.connect))
+            vpnBtn.setText(requireContext().getString(R.string.connect))
         } else if (status == "connecting") {
-            vpnBtn.setText(context!!.getString(R.string.connecting))
+            vpnBtn.setText(requireContext().getString(R.string.connecting))
         } else if (status == "connected") {
-            vpnBtn.setText(context!!.getString(R.string.disconnect))
+            vpnBtn.setText(requireContext().getString(R.string.disconnect))
         } else if (status == "tryDifferentServer") {
             vpnBtn.setBackgroundResource(R.drawable.button_connected)
             vpnBtn.setText("Try Different\nServer")
