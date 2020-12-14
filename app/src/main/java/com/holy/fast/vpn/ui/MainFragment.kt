@@ -1,21 +1,25 @@
 package com.holy.fast.vpn.ui
 
 import android.app.Activity
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.VpnService
 import android.os.Bundle
+import android.os.Handler
 import android.os.RemoteException
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.bumptech.glide.Glide
+import com.airbnb.lottie.LottieAnimationView
 import com.holy.fast.vpn.CheckInternetConnection
 import com.holy.fast.vpn.R
 import com.holy.fast.vpn.SharedPreference
@@ -29,6 +33,8 @@ import java.io.IOException
 
 class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     private var server: Server? = null
+    lateinit var la_animation: LottieAnimationView
+
     private var connection: CheckInternetConnection? = null
     private val vpnThread = OpenVPNThread()
     private val vpnService = OpenVPNService()
@@ -40,7 +46,17 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     lateinit var byteOutTv: TextView
     lateinit var byteInTv: TextView
     lateinit var lastPacketReceiveTv: TextView
-    lateinit var selectedServerIcon: ImageView
+
+//    fun startAnimation(ctx: Context?, view: Int, animation: Int, show: Boolean) {
+//        val Element: View = findViewById<View>(view)
+//        if (show) {
+//            Element.visibility = View.VISIBLE
+//        } else {
+//            Element.visibility = View.INVISIBLE
+//        }
+//        val anim = AnimationUtils.loadAnimation(ctx, animation)
+//        Element.startAnimation(anim)
+//    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -52,9 +68,12 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
         lastPacketReceiveTv = view.findViewById(R.id.lastPacketReceiveTv)
         byteInTv = view.findViewById(R.id.byteInTv)
         byteOutTv = view.findViewById(R.id.byteOutTv)
-        selectedServerIcon = view.findViewById(R.id.selectedServerIcon)
+        la_animation =  view.findViewById(R.id.la_animation)
 
         initializeAll()
+        la_animation.cancelAnimation()
+        la_animation.setAnimation(R.raw.ninjainsecure)
+        la_animation.playAnimation()
         return view
     }
 
@@ -317,9 +336,7 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
      * @param serverIcon: icon URL
      */
     fun updateCurrentServerIcon(serverIcon: String?) {
-        Glide.with(context!!)
-                .load(serverIcon)
-                .into(selectedServerIcon)
+
     }
 
     /**
