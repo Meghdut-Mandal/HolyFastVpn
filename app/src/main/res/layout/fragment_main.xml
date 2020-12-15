@@ -14,7 +14,7 @@
         android:layout_marginTop="4dp"
         android:text="Connection Status"
         android:textColor="@color/colorWhite"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/logTv" />
@@ -26,7 +26,7 @@
         android:layout_marginTop="4dp"
         android:text="Duration: 00:00:00"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -37,7 +37,7 @@
         android:layout_marginTop="4dp"
         android:text="Packet Received:"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/durationTv" />
 
@@ -48,7 +48,7 @@
         android:layout_marginTop="4dp"
         android:text="Bytes In: "
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/lastPacketReceiveTv" />
 
@@ -59,24 +59,25 @@
         android:layout_marginTop="4dp"
         android:text="Bytes OUT: "
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/byteInTv" />
 
     <Button
         android:id="@+id/vpnBtn"
         android:layout_width="150dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/button"
         android:tag="1"
         android:text="Connect"
         android:textColor="@color/colorWhite"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/la_animation" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -95,16 +96,6 @@
         app:layout_constraintGuide_percent="0.28"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/la_animation"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true" />
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
@@ -119,7 +110,7 @@
         android:layout_height="wrap_content"
         android:text="Connecting"
         android:textColor="@color/colorWhite"
-        android:textSize="15sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />

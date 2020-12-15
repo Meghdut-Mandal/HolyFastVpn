@@ -33,7 +33,7 @@ import java.io.IOException
 
 class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     private var server: Server? = null
-    lateinit var la_animation: LottieAnimationView
+//    lateinit var la_animation: LottieAnimationView
 
     private var connection: CheckInternetConnection? = null
     private val vpnThread = OpenVPNThread()
@@ -58,12 +58,7 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
         lastPacketReceiveTv = view.findViewById(R.id.lastPacketReceiveTv)
         byteInTv = view.findViewById(R.id.byteInTv)
         byteOutTv = view.findViewById(R.id.byteOutTv)
-        la_animation =  view.findViewById(R.id.la_animation)
-
         initializeAll()
-        la_animation.cancelAnimation()
-        la_animation.setAnimation(R.raw.ninjainsecure)
-        la_animation.playAnimation()
         return view
     }
 
