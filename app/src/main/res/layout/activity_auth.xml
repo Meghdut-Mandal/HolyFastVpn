@@ -52,13 +52,24 @@
         app:layout_constraintTop_toTopOf="@+id/guideline6" />
 
     <ImageView
-        android:id="@+id/imageView2"
         android:layout_width="0dp"
-        android:layout_height="95dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/holy_fast_logo"
         app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toStartOf="@+id/guideline7"
         app:layout_constraintStart_toStartOf="@+id/guideline4"
-        tools:srcCompat="@drawable/holy_fast_logo" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline7"
