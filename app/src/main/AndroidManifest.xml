@@ -20,9 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.HomeActivity"
-            android:label="HolyFast Vpn"/>
+            android:label="HolyFast Vpn" />
         <activity
             android:name="de.blinkt.openvpn.DisconnectVPNActivity"
             android:excludeFromRecents="true"

@@ -7,57 +7,41 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.VpnService
 import android.os.Bundle
-import android.os.Handler
 import android.os.RemoteException
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.airbnb.lottie.LottieAnimationView
+import com.google.firebase.database.FirebaseDatabase
 import com.holy.fast.vpn.CheckInternetConnection
 import com.holy.fast.vpn.R
 import com.holy.fast.vpn.SharedPreference
 import com.holy.fast.vpn.interfaces.ChangeServer
 import com.holy.fast.vpn.model.Server
+import com.holy.fast.vpn.model.StaticServer
 import de.blinkt.openvpn.OpenVpnApi
 import de.blinkt.openvpn.core.OpenVPNService
 import de.blinkt.openvpn.core.OpenVPNThread
 import de.blinkt.openvpn.core.VpnStatus
+import kotlinx.android.synthetic.main.fragment_main.*
 import java.io.IOException
 
 class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
     private var server: Server? = null
-//    lateinit var la_animation: LottieAnimationView
 
     private var connection: CheckInternetConnection? = null
-    private val vpnThread = OpenVPNThread()
-    private val vpnService = OpenVPNService()
     var vpnStart = false
     private var preference: SharedPreference? = null
-    lateinit var durationTv: TextView
-    lateinit var vpnBtn: Button
-    lateinit var logTv: TextView
-    lateinit var byteOutTv: TextView
-    lateinit var byteInTv: TextView
-    lateinit var lastPacketReceiveTv: TextView
+
 
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         val view: View = inflater.inflate(R.layout.fragment_main, container, false)
-        durationTv = view.findViewById(R.id.durationTv)
-        vpnBtn = view.findViewById(R.id.vpnBtn)
-        logTv = view.findViewById(R.id.logTv)
-        lastPacketReceiveTv = view.findViewById(R.id.lastPacketReceiveTv)
-        byteInTv = view.findViewById(R.id.byteInTv)
-        byteOutTv = view.findViewById(R.id.byteOutTv)
         initializeAll()
         return view
     }
@@ -66,9 +50,11 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
      * Initialize all variable and object
      */
     private fun initializeAll() {
-        preference = SharedPreference(context)
-        server = preference!!.server
+        preference = SharedPreference(requireContext())
 
+        server = preference!!.getServer()
+
+        val staticServer=StaticServer(requireContext(),server!!)
         // Update current selected server icon
         updateCurrentServerIcon(server?.flagUrl)
         connection = CheckInternetConnection()
@@ -339,7 +325,7 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
 
     override fun onResume() {
         if (server == null) {
-            server = preference!!.server
+            server = preference!!.getServer()
         }
         super.onResume()
     }
@@ -349,7 +335,7 @@ class MainFragment : Fragment(), View.OnClickListener, ChangeServer {
      */
     override fun onStop() {
         if (server != null) {
-            preference!!.saveServer(server)
+            preference!!.saveServer(server!!)
         }
         super.onStop()
     }

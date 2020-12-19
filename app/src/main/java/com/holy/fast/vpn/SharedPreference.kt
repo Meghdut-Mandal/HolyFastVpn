@@ -1,68 +1,71 @@
-package com.holy.fast.vpn;
+package com.holy.fast.vpn
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Context
+import android.content.SharedPreferences
+import com.google.firebase.database.FirebaseDatabase
+import com.holy.fast.vpn.model.AssetServer
+import com.holy.fast.vpn.model.Server
+import com.holy.fast.vpn.model.StaticServer
 
-import com.holy.fast.vpn.model.AssetServer;
-import com.holy.fast.vpn.model.FirebaseServer;
-import com.holy.fast.vpn.model.Server;
+class SharedPreference(context: Context) {
+    private val mPreference: SharedPreferences
+    private val mPrefEditor: SharedPreferences.Editor
+    private val context: Context
 
-import static com.holy.fast.vpn.Utils.getImgURL;
-
-public class SharedPreference {
-
-    private static final String APP_PREFS_NAME = "CakeVPNPreference";
-
-    private SharedPreferences mPreference;
-    private SharedPreferences.Editor mPrefEditor;
-    private Context context;
-
-    private static final String SERVER_COUNTRY = "server_country";
-    private static final String SERVER_FLAG = "server_flag";
-    private static final String SERVER_OVPN = "server_ovpn";
-    private static final String SERVER_OVPN_USER = "server_ovpn_user";
-    private static final String SERVER_OVPN_PASSWORD = "server_ovpn_password";
-
-    public SharedPreference(Context context) {
-        this.mPreference = context.getSharedPreferences(APP_PREFS_NAME, Context.MODE_PRIVATE);
-        this.mPrefEditor = mPreference.edit();
-        this.context = context;
-    }
+    private var server: Server? = null
 
     /**
      * Save server details
+     *
      * @param server details of ovpn server
      */
-    public void saveServer(Server server){
-        mPrefEditor.putString(SERVER_COUNTRY, server.getCountry());
-        mPrefEditor.putString(SERVER_FLAG, server.getFlagUrl());
-        mPrefEditor.putString(SERVER_OVPN, server.getOvpn());
-        mPrefEditor.putString(SERVER_OVPN_USER, server.getOvpnUserName());
-        mPrefEditor.putString(SERVER_OVPN_PASSWORD, server.getOvpnUserPassword());
-        mPrefEditor.commit();
-    }
+    fun saveServer(server: Server) {
+        mPrefEditor.putString(SERVER_COUNTRY, server.country)
+        mPrefEditor.putString(SERVER_FLAG, server.flagUrl)
+        mPrefEditor.putString(SERVER_OVPN, server.ovpn)
+        mPrefEditor.putString(SERVER_OVPN_USER, server.ovpnUserName)
+        mPrefEditor.putString(SERVER_OVPN_PASSWORD, server.ovpnUserPassword)
+        mPrefEditor.commit()
+    }//                getFirebaseServer();
 
     /**
      * Get server data from shared preference
+     *
      * @return server model object
      */
-    public Server getServer() {
+    fun getServer(): Server {
+        return server ?: assetServer
 
-        return new AssetServer(
-              "India",
-             getImgURL(R.drawable.uk_flag),
-              "holyfast.ovpn",
-              "Gautam",
-               "1234567890");
     }
 
-//    public Server getServer() {
-//
-//        return new FirebaseServer(
-//                "India",
-//                getImgURL(R.drawable.uk_flag),
-//                "holyfast.ovpn",
-//                "Gautam",
-//                "1234567890");
-//    }
+    private val assetServer: Server
+        get() {
+            return AssetServer(
+                    "India",
+                    Utils.getImgURL(R.drawable.uk_flag),
+                    "kiit_meghdut_servervpn.ovpn",
+                    "meghdut",
+                    "1234567890")
+        }
+
+    companion object {
+        private const val APP_PREFS_NAME = "CakeVPNPreference"
+        private const val SERVER_COUNTRY = "server_country"
+        private const val SERVER_FLAG = "server_flag"
+        private const val SERVER_OVPN = "server_ovpn"
+        private const val SERVER_OVPN_USER = "server_ovpn_user"
+        private const val SERVER_OVPN_PASSWORD = "server_ovpn_password"
+    }
+
+    init {
+        mPreference = context.getSharedPreferences(APP_PREFS_NAME, Context.MODE_PRIVATE)
+        mPrefEditor = mPreference.edit()
+        this.context = context
+        FirebaseDatabase.getInstance().reference.child("openvpn").child("server1").get().addOnCompleteListener {
+            it.result?.getValue(StaticServer::class.java)?.also {
+                server = it
+                println("com.holy.fast.vpn>>SharedPreference> Server loaded ")
+            }
+        }
+    }
 }

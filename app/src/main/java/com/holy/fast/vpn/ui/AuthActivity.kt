@@ -11,10 +11,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.holy.fast.vpn.R
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -30,9 +35,13 @@ class AuthActivity : AppCompatActivity() {
     private val TAG = "SignInActivity Tag"
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
-
+    private var inAuth = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (FirebaseAuth.getInstance().currentUser!=null){
+            startMain()
+        }
+
         setContentView(R.layout.activity_auth)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -47,21 +56,19 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = auth.currentUser
-        updateUI(currentUser)
-    }
 
     private fun signIn() {
+        if (inAuth) return
+        inAuth = true
+
+        signInButton.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-
 
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -74,16 +81,16 @@ class AuthActivity : AppCompatActivity() {
             val account = completedTask.getResult(ApiException::class.java)!!
             Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
             firebaseAuthWithGoogle(account.idToken!!)
-        } catch (e: ApiException) {
-            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
-
         }
+        catch (e: ApiException) {
+            Log.w(TAG, "signInResult:failed code=" + e.statusCode)
+        }
+        inAuth = false
+
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        signInButton.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
         GlobalScope.launch(Dispatchers.IO) {
             val auth = auth.signInWithCredential(credential).await()
             val firebaseUser = auth.user
@@ -93,16 +100,42 @@ class AuthActivity : AppCompatActivity() {
         }
 
     }
-    private fun updateUI(firebaseUser: FirebaseUser?) {
-        if(firebaseUser != null) {
 
-            val mainActivityIntent = Intent(this, HomeActivity::class.java)
-            startActivity(mainActivityIntent)
-            finish()
+    private fun updateUI(firebaseUser: FirebaseUser?) {
+        if (firebaseUser != null) {
+
+            val email = firebaseUser.email?.replace("@", "_")?.replace(".", "_") ?: "Not Found"
+            FirebaseDatabase.getInstance().reference.child("user").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.hasChild(email)) {
+                        inAuth = false
+                        startMain()
+                    } else {
+                        googleSignInClient.signOut()
+                        signInButton.visibility = View.VISIBLE
+                        progressBar.visibility = View.INVISIBLE
+                        Snackbar.make(progressBar, "This Vpn is only for special members.Now fuck off", Snackbar.LENGTH_LONG).show()
+                    }
+                    inAuth = false
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    inAuth = false
+                }
+            })
         } else {
+            inAuth = false
             signInButton.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
         }
     }
+
+    private fun startMain() {
+val intent = Intent(this@AuthActivity, HomeActivity::class.java)
+startActivity(intent)
+finishAffinity()
+}
+
 
 }
