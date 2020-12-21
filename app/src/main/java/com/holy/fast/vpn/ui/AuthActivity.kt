@@ -5,11 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.auth.api.signin.*
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.Scope
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.holy.fast.vpn.R
+import com.holy.fast.vpn.SharedPreference
 import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,26 +32,34 @@ class AuthActivity : AppCompatActivity() {
 
     private val RC_SIGN_IN: Int = 123
     private val TAG = "SignInActivity Tag"
-    private lateinit var googleSignInClient: GoogleSignInClient
-    private lateinit var auth: FirebaseAuth
-    private var inAuth = false
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (FirebaseAuth.getInstance().currentUser!=null){
-            startMain()
-        }
-
-        setContentView(R.layout.activity_auth)
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+    private val gso by lazy {
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-        auth = Firebase.auth
+    }
+    private val googleSignInClient: GoogleSignInClient by lazy {
+        GoogleSignIn.getClient(this, gso)
+    }
+    private var inAuth = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+//        googleSignInClient.
+        if (FirebaseAuth.getInstance().currentUser != null) {
 
+            startMain()
+        }
+        setContentView(R.layout.activity_auth)
         signInButton.setOnClickListener {
             signIn()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            signInButton.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
         }
     }
 
@@ -92,7 +99,7 @@ class AuthActivity : AppCompatActivity() {
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         GlobalScope.launch(Dispatchers.IO) {
-            val auth = auth.signInWithCredential(credential).await()
+            val auth = Firebase.auth.signInWithCredential(credential).await()
             val firebaseUser = auth.user
             withContext(Dispatchers.Main) {
                 updateUI(firebaseUser)
@@ -117,7 +124,6 @@ class AuthActivity : AppCompatActivity() {
                         Snackbar.make(progressBar, "This Vpn is only for special members.Now fuck off", Snackbar.LENGTH_LONG).show()
                     }
                     inAuth = false
-
                 }
 
                 override fun onCancelled(error: DatabaseError) {
