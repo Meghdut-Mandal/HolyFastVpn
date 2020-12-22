@@ -119,6 +119,7 @@ class AuthActivity : AppCompatActivity() {
                         startMain()
                     } else {
                         googleSignInClient.signOut()
+                        FirebaseAuth.getInstance().signOut()
                         signInButton.visibility = View.VISIBLE
                         progressBar.visibility = View.INVISIBLE
                         Snackbar.make(progressBar, "This Vpn is only for special members.Now fuck off", Snackbar.LENGTH_LONG).show()
@@ -138,10 +139,10 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun startMain() {
-val intent = Intent(this@AuthActivity, HomeActivity::class.java)
-startActivity(intent)
-finishAffinity()
-}
+        val intent = Intent(this@AuthActivity, HomeActivity::class.java)
+        startActivity(intent)
+        finishAffinity()
+    }
 
 
 }
