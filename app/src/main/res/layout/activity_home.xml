@@ -4,7 +4,7 @@
     android:id="@+id/container"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:background="@drawable/burj_khalifa"
+    android:background="@drawable/home_back"
     android:layout_height="match_parent">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
