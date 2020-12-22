@@ -34,7 +34,7 @@ class SharedPreference(context: Context) {
      * @return server model object
      */
     fun getServer(): Server {
-        return server ?: assetServer
+        return assetServer
 
     }
 
@@ -43,8 +43,8 @@ class SharedPreference(context: Context) {
             return AssetServer(
                     "India",
                     Utils.getImgURL(R.drawable.uk_flag),
-                    "kiit_meghdut_servervpn.ovpn",
-                    "meghdut",
+                    "kiit_global_servervpn.ovpn",
+                    "global",
                     "1234567890")
         }
 
@@ -61,11 +61,11 @@ class SharedPreference(context: Context) {
         mPreference = context.getSharedPreferences(APP_PREFS_NAME, Context.MODE_PRIVATE)
         mPrefEditor = mPreference.edit()
         this.context = context
-        FirebaseDatabase.getInstance().reference.child("openvpn").child("server1").get().addOnCompleteListener {
-            it.result?.getValue(StaticServer::class.java)?.also {
-                server = it
-                println("com.holy.fast.vpn>>SharedPreference> Server loaded ")
-            }
-        }
+//        FirebaseDatabase.getInstance().reference.child("openvpn").child("server1").get().addOnCompleteListener {
+//            it.result?.getValue(StaticServer::class.java)?.also {
+//                server = it
+//                println("com.holy.fast.vpn>>SharedPreference> Server loaded ")
+//            }
+//        }
     }
 }
