@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.holy.fast.vpn.R
 import com.holy.fast.vpn.SharedPreference
@@ -110,32 +111,52 @@ class AuthActivity : AppCompatActivity() {
 
     private fun updateUI(firebaseUser: FirebaseUser?) {
         if (firebaseUser != null) {
-
-            val email = firebaseUser.email?.replace("@", "_")?.replace(".", "_") ?: "Not Found"
-            FirebaseDatabase.getInstance().reference.child("user").addListenerForSingleValueEvent(object : ValueEventListener {
+            FirebaseDatabase.getInstance().reference.child("check").addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.hasChild(email)) {
-                        inAuth = false
+                    val value = snapshot.getValue(Boolean::class.java) ?: false
+                    if (value){
+                        verifyRegistration(firebaseUser)
+                    }else {
                         startMain()
-                    } else {
-                        googleSignInClient.signOut()
-                        FirebaseAuth.getInstance().signOut()
-                        signInButton.visibility = View.VISIBLE
-                        progressBar.visibility = View.INVISIBLE
-                        Snackbar.make(progressBar, "This Vpn is only for special members.Now fuck off", Snackbar.LENGTH_LONG).show()
                     }
-                    inAuth = false
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    inAuth = false
+                    cancelAuth()
                 }
             })
+
         } else {
-            inAuth = false
-            signInButton.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
+            cancelAuth()
         }
+    }
+
+    private fun cancelAuth() {
+        googleSignInClient.signOut()
+        FirebaseAuth.getInstance().signOut()
+        inAuth = false
+        signInButton.visibility = View.VISIBLE
+        progressBar.visibility = View.GONE
+    }
+
+    private fun verifyRegistration(firebaseUser: FirebaseUser) {
+        val email = firebaseUser.email?.replace("@", "_")?.replace(".", "_") ?: "Not Found"
+        FirebaseDatabase.getInstance().reference.child("user").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.hasChild(email)) {
+                    inAuth = false
+                    startMain()
+                } else {
+                    cancelAuth()
+                    Snackbar.make(progressBar, "This Vpn is only for special members.Sorry ;(", Snackbar.LENGTH_LONG).show()
+                }
+                inAuth = false
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                cancelAuth()
+            }
+        })
     }
 
     private fun startMain() {
